@@ -9,6 +9,8 @@ functions.
 
   - GetCallerInfo - Parse caller stack.
   - GetCallerFunctionName - Return the caller of that function with it's stack information.
+  - GetCallerStack - Provides A list of the entire execution stack, with possibilities to skip callers and limit the
+    amount of results.
 
 
 ## License

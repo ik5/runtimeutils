@@ -1,6 +1,7 @@
 package runtimeutils_test
 
 import (
+	"errors"
 	"fmt"
 	"regexp"
 	"testing"
@@ -10,6 +11,7 @@ import (
 
 const (
 	callerSkip  = 2
+	maxFrames   = 10
 	packageName = "runtimeutils_test"
 	fileName    = "caller_test.go"
 )
@@ -96,6 +98,44 @@ func TestDebugInfo(t *testing.T) {
 		t.Errorf(
 			"Expected FileName():LineNo->PackageName().Func, got %s",
 			infoDebugInfo,
+		)
+	}
+}
+
+func TestGestCallerStack(t *testing.T) {
+	t.Parallel()
+
+	const callerSkip = 0
+
+	stackInfoList, err := runtimeutils.GetCallerStack(callerSkip, maxFrames)
+	if err != nil {
+		t.Errorf("Unable to get caller stack: %s", err)
+	}
+
+	if stackInfoList == nil {
+		t.Error("stackInfoList is nil, expected at least one item")
+	}
+
+	itemLength := len(stackInfoList)
+	if itemLength == 0 {
+		t.Error("stackInfoList is empty slice")
+	}
+}
+
+func TestGestCallerStackWithError(t *testing.T) {
+	t.Parallel()
+
+	const maxFrames = 0
+
+	_, err := runtimeutils.GetCallerStack(callerSkip, maxFrames)
+	if err == nil {
+		t.Error("expected error, but nil provided")
+	}
+
+	if !errors.Is(err, runtimeutils.ErrMaxStackIsLowerThan1) {
+		t.Errorf(
+			"expected err \"%s\" but \"%s\" provided",
+			runtimeutils.ErrMaxStackIsLowerThan1, err,
 		)
 	}
 }
