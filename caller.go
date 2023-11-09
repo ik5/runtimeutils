@@ -12,6 +12,13 @@ const (
 	callerSkip int = 3
 )
 
+// GetCallerInfo returns a struct of CallerInfo regarding the caller frame
+// requested by callerSkipFrames.
+//
+// With callerSkipFrames, when value is 0 - It will return runtime.Callers,
+// When callerSkipFrames is 1, it will return GetCallerInfo.
+// So it is recommended to set callerSkipFrames for 2 or beyond to get the
+// current caller for information.
 func GetCallerInfo(callerSkipFrames int) (CallerInfo, error) {
 	fpcs := make([]uintptr, 1)
 
