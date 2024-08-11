@@ -6,7 +6,7 @@ import (
 	"regexp"
 	"testing"
 
-	runtimeutils "gitea.linesip.com/internal_libraries/runtimeutils"
+	runtimeutils "github.com/ik5/runtimeutils"
 )
 
 const (
